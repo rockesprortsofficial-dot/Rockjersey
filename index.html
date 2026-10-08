@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ROCK ESPORTS — Jersey 360°</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#05070b;color:#fff;font-family:Arial,sans-serif}
+main{max-width:850px;margin:auto;padding:18px 12px 35px}
+h1{text-align:center;letter-spacing:4px;margin:4px 0}
+.sub{text-align:center;color:#00eaff;letter-spacing:2px;font-size:12px;margin-bottom:16px}
+.viewer{position:relative;max-width:760px;margin:auto;aspect-ratio:1/1;
+background:radial-gradient(circle,#1c2a38,#05070b 68%);border:1px solid #2b3c4a;
+border-radius:24px;overflow:hidden;touch-action:none}
+#jersey{width:92%;height:92%;margin:4%;object-fit:contain;user-select:none;
+-webkit-user-drag:none;filter:drop-shadow(0 20px 20px #0009)}
+.hint{position:absolute;z-index:2;top:12px;left:50%;transform:translateX(-50%);
+background:#000b;padding:8px 12px;border-radius:20px;font-size:10px;white-space:nowrap}
+.controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:15px 0}
+button{background:#0d151e;color:white;border:1px solid #304250;border-radius:11px;
+padding:10px 14px;font-weight:bold}
+.name{text-align:center;letter-spacing:3px;font-weight:bold;margin:7px}
+.note{text-align:center;color:#8995a1;font-size:12px;line-height:1.6;margin-top:16px}
+</style>
+</head>
+<body>
+<main>
+<h1>ROCK ESPORTS</h1>
+<div class="sub">OFFICIAL JERSEY • 360° VIEW</div>
+<div class="viewer" id="viewer">
+<div class="hint">SWIPE / DRAG ← →</div>
+<img id="jersey" src="images/front.jpg" alt="ROCK ESPORTS Jersey">
+</div>
+<div class="name" id="name">FRONT</div>
+<div class="controls">
+<button onclick="show(0)">◀ FRONT</button>
+<button onclick="toggle()" id="auto">▶ AUTO ROTATE</button>
+<button onclick="show(1)">BACK ▶</button>
+</div>
+<div class="note">
+यो तपाईंले पठाउनुभएको यही jersey image बाट बनाइएको version हो।<br>
+अहिले Front ↔ Back घुम्छ। वास्तविक smooth 360° का लागि 8–36 वटा अलग angle फोटो चाहिन्छ।
+</div>
+</main>
+<script>
+const frames=["images/front.jpg","images/back.jpg"];
+const labels=["FRONT","BACK"];
+let i=0,down=false,last=0,timer=null;
+const v=document.getElementById("viewer"),p=document.getElementById("jersey"),n=document.getElementById("name");
+function show(x){i=(x+2)%2;p.src=frames[i];n.textContent=labels[i]}
+function start(x){down=true;last=x}
+function move(x){if(!down)return;let d=x-last;if(Math.abs(d)>25){show(i+(d<0?1:-1));last=x}}
+function stop(){down=false}
+v.addEventListener("touchstart",e=>start(e.touches[0].clientX),{passive:true});
+v.addEventListener("touchmove",e=>move(e.touches[0].clientX),{passive:true});
+v.addEventListener("touchend",stop);
+v.addEventListener("mousedown",e=>start(e.clientX));
+window.addEventListener("mousemove",e=>move(e.clientX));
+window.addEventListener("mouseup",stop);
+function toggle(){
+ if(timer){clearInterval(timer);timer=null;document.getElementById("auto").textContent="▶ AUTO ROTATE"}
+ else{timer=setInterval(()=>show(i+1),800);document.getElementById("auto").textContent="⏸ STOP ROTATE"}
+}
+show(0);
+</script>
+</body>
+</html>
